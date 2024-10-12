@@ -2,10 +2,10 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 import org.example.utils.Gender;
+import org.example.utils.GenderColumnConvertor;
 
 import java.util.Objects;
 
-import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -17,7 +17,8 @@ public class Parent {
     private int id;
     @Column
     private String name;
-    @Enumerated(STRING)
+    //@Enumerated(STRING) - the same as a @Convert
+    @Convert(converter = GenderColumnConvertor.class)
     private Gender gender;
     @Column
     private Integer age;
