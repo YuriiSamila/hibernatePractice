@@ -13,6 +13,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Parent {
 
     @Id
+//    @GeneratedValue(generator = IdGenerator.NAME)
+//    @GenericGenerator(name = IdGenerator.NAME, type = IdGenerator.class) - alternative(deprecated)
     @GeneratedValue(strategy = IDENTITY)
     private int id;
     @Column
