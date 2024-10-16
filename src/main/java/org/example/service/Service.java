@@ -1,11 +1,13 @@
 package org.example.service;
 
+import jakarta.persistence.Tuple;
 import org.example.entities.Child;
 import org.example.entities.Parent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.hibernate.query.criteria.JpaCriteriaQuery;
@@ -120,6 +122,26 @@ public class Service {
         criteriaQuery.select(root).where(criteriaBuilder.or(idPredicate, namePredicate)).orderBy(criteriaBuilder.asc(root.get("age")));
         Query<Parent> query = session.createQuery(criteriaQuery);
         return query.getResultList();
+    }
+
+    public void getParentsNativeQueryTuple() {
+        Session session = getSession();
+        NativeQuery<Tuple> nativeQuery = session.createNativeQuery("SELECT name, age, id FROM parents WHERE gender = :genderok", Tuple.class);
+        nativeQuery.setParameter("genderok", "male");
+        List<Tuple> resultList = nativeQuery.getResultList();
+        for (Tuple tuple : resultList) {
+            System.out.println(tuple.get("name") + " - " + tuple.get("age") + " - " + tuple.get("id"));
+        }
+    }
+
+    public void getParentsJPQLTuple() {
+        Session session = getSession();
+        Query<Tuple> query = session.createQuery("SELECT name as name, age as age FROM Parent WHERE gender = :gender", Tuple.class);
+        query.setParameter("gender", MALE);
+        List<Tuple> resultList = query.getResultList();
+        for (Tuple tuple : resultList) {
+            System.out.println(tuple.get("name") + " - " + tuple.get("age"));
+        }
     }
 
 }
