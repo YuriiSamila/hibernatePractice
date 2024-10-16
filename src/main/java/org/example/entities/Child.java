@@ -11,17 +11,17 @@ import static jakarta.persistence.GenerationType.*;
 
 @Entity
 @Table(name = "childs")
-public class Child {
+public class Child extends Person {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private int id;
-    @Column
-    private String name;
-    @Enumerated(STRING)
-    private Gender gender;
-    @Column
-    private Integer age;
+    //    @Id
+//    @GeneratedValue(strategy = IDENTITY)
+//    private int id;
+//    @Column
+//    private String name;
+//    @Enumerated(STRING)
+//    private Gender gender;
+//    @Column
+//    private Integer age;
     @OneToOne(cascade = REMOVE)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Parent parent;

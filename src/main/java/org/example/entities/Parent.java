@@ -10,20 +10,20 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "parents")
-public class Parent {
+public class Parent extends Person {
 
-    @Id
-//    @GeneratedValue(generator = IdGenerator.NAME)
-//    @GenericGenerator(name = IdGenerator.NAME, type = IdGenerator.class) - alternative(deprecated)
-    @GeneratedValue(strategy = IDENTITY)
-    private int id;
-    @Column
-    private String name;
-    //@Enumerated(STRING) - the same as a @Convert
-    @Convert(converter = GenderColumnConvertor.class)
-    private Gender gender;
-    @Column
-    private Integer age;
+    //    @Id
+////    @GeneratedValue(generator = IdGenerator.NAME)
+////    @GenericGenerator(name = IdGenerator.NAME, type = IdGenerator.class) - alternative(deprecated)
+//    @GeneratedValue(strategy = IDENTITY)
+//    private int id;
+//    @Column
+//    private String name;
+//    //@Enumerated(STRING) - the same as a @Convert
+//    @Convert(converter = GenderColumnConvertor.class)
+//    private Gender gender;
+//    @Column
+//    private Integer age;
     @OneToOne(mappedBy = "parent")
     private Child child;
 

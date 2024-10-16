@@ -65,9 +65,9 @@ public class Service {
         return parent;
     }
 
-    public Parent getParent() {
+    public Parent getParent(int id) {
         Session session = getSession();
-        return session.get(Parent.class, 4);
+        return session.get(Parent.class, id);
     }
 
     public void removeParent() {
