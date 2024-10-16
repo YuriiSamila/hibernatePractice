@@ -1,12 +1,6 @@
 package org.example;
 
-import org.example.entities.Parent;
-import org.example.service.ParentService;
 import org.example.service.Service;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import java.util.Map;
 
 
 public class Main {
@@ -14,8 +8,7 @@ public class Main {
         Service service = new Service();
 //        System.out.println(service.getParent());
         try {
-
-            service.updateUsingFlush();
+            System.out.println(service.getParentsCriteriaAPITwoPredicates(4, "name"));
             service.commitTransaction();
         } catch (Exception e) {
             if (service.getTransaction() != null) {
