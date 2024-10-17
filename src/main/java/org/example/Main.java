@@ -8,7 +8,7 @@ public class Main {
         Service service = new Service();
 //        System.out.println(service.getParent());
         try {
-            System.out.println(service.getParentsCriteriaAPITwoPredicates(4, "name"));
+            service.saveParent();
             service.commitTransaction();
         } catch (Exception e) {
             if (service.getTransaction() != null) {

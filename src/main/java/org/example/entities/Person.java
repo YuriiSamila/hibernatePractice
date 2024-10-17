@@ -4,16 +4,18 @@ import jakarta.persistence.*;
 import org.example.utils.Gender;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static jakarta.persistence.GenerationType.TABLE;
+import static jakarta.persistence.InheritanceType.JOINED;
 import static jakarta.persistence.InheritanceType.TABLE_PER_CLASS;
 
 @Entity
-@Inheritance(strategy = TABLE_PER_CLASS)
+@Inheritance(strategy = JOINED)
 @Table(name = "person")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = TABLE)
+    @GeneratedValue(strategy = IDENTITY)
     protected int id;
     @Column
     protected String name;

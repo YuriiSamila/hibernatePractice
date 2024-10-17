@@ -10,7 +10,6 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.*;
 
 @Entity
-@Table(name = "childs")
 public class Child extends Person {
 
     //    @Id

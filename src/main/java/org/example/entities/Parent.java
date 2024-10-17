@@ -8,7 +8,6 @@ import org.example.utils.Gender;
 import java.util.Objects;
 
 @Entity
-@Table(name = "parents")
 public class Parent extends Person {
 
     //    @Id
