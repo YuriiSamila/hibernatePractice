@@ -9,7 +9,6 @@ import static jakarta.persistence.InheritanceType.TABLE_PER_CLASS;
 
 @Entity
 @Inheritance(strategy = TABLE_PER_CLASS)
-@Table(name = "person")
 public class Person {
 
     @Id

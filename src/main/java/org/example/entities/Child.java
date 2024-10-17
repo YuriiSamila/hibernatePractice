@@ -1,16 +1,15 @@
 package org.example.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import org.example.utils.Gender;
 
 import java.util.Objects;
 
 import static jakarta.persistence.CascadeType.REMOVE;
-import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.*;
 
 @Entity
-@Table(name = "childs")
 public class Child extends Person {
 
     //    @Id

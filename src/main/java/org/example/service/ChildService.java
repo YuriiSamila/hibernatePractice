@@ -5,9 +5,8 @@ import org.example.entities.Parent;
 import org.hibernate.Session;
 
 import static org.example.utils.Gender.FEMALE;
-import static org.example.utils.Gender.MALE;
 
-public class ChildService extends Service {
+public class ChildService extends ServiceMySql {
 
     public ChildService() {
         super();

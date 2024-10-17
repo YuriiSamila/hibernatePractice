@@ -6,9 +6,9 @@ import org.example.service.Service;
 public class Main {
     public static void main(String[] args) {
         Service service = new Service();
-//        System.out.println(service.getParent());
         try {
-            System.out.println(service.getParentsCriteriaAPITwoPredicates(4, "name"));
+            service.saveCustomEntity();
+            System.out.println(service.getCustomEntity(2));
             service.commitTransaction();
         } catch (Exception e) {
             if (service.getTransaction() != null) {
