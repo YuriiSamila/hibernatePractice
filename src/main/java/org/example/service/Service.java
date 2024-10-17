@@ -3,6 +3,7 @@ package org.example.service;
 import jakarta.persistence.Tuple;
 import org.example.entities.Child;
 import org.example.entities.Parent;
+import org.example.entities.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -29,6 +30,7 @@ public class Service {
         sessionFactory = new Configuration()
                 .addAnnotatedClass(Parent.class)
                 .addAnnotatedClass(Child.class)
+                .addAnnotatedClass(Person.class)
                 .buildSessionFactory();
         session = sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
@@ -68,6 +70,13 @@ public class Service {
     public Parent getParent(int id) {
         Session session = getSession();
         return session.get(Parent.class, id);
+    }
+
+    public Person getPerson(int id) {
+        Session session = getSession();
+        Query<Person> query = session.createQuery("FROM Person WHERE id = :id", Person.class);
+        return query.setParameter("id", id)
+                .getSingleResult();
     }
 
     public void removeParent() {

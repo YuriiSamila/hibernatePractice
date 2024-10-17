@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import org.example.utils.Gender;
 
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.TABLE;
+import static jakarta.persistence.InheritanceType.TABLE_PER_CLASS;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = TABLE_PER_CLASS)
+@Table(name = "person")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = TABLE)
     protected int id;
     @Column
     protected String name;
@@ -18,6 +21,16 @@ public class Person {
     protected Gender gender;
     @Column
     protected Integer age;
+
+    public Person() {
+    }
+
+    public Person(int id, String name, Gender gender, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+    }
 
     public int getId() {
         return id;
@@ -49,5 +62,23 @@ public class Person {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public void setChild(Child child) {
+
+    }
+
+    public void setParent(Parent parent) {
+
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                '}';
     }
 }

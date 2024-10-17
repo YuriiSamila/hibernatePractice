@@ -1,12 +1,11 @@
 package org.example.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import org.example.utils.Gender;
-import org.example.utils.GenderColumnConvertor;
 
 import java.util.Objects;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "parents")
@@ -34,6 +33,13 @@ public class Parent extends Person {
         this.name = name;
         this.gender = gender;
         this.age = age;
+    }
+
+    public Parent(String name, Gender gender, Integer age, Child child) {
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.child = child;
     }
 
     public int getId() {
@@ -66,6 +72,14 @@ public class Parent extends Person {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Child getChild() {
+        return child;
+    }
+
+    public void setChild(Child child) {
+        this.child = child;
     }
 
     @Override
