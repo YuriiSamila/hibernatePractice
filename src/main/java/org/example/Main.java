@@ -6,9 +6,9 @@ import org.example.service.Service;
 public class Main {
     public static void main(String[] args) {
         Service service = new Service();
-//        System.out.println(service.getParent());
+        //System.out.println(service.getPerson(3));
         try {
-            System.out.println(service.getParentsCriteriaAPITwoPredicates(4, "name"));
+            service.updateChild(service.saveParent());
             service.commitTransaction();
         } catch (Exception e) {
             if (service.getTransaction() != null) {

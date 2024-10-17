@@ -10,7 +10,7 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.*;
 
 @Entity
-@Table(name = "childs")
+@DiscriminatorValue("child")
 public class Child extends Person {
 
     //    @Id

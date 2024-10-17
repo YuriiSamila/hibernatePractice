@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -8,7 +9,7 @@ import org.example.utils.Gender;
 import java.util.Objects;
 
 @Entity
-@Table(name = "parents")
+@DiscriminatorValue("parent")
 public class Parent extends Person {
 
     //    @Id

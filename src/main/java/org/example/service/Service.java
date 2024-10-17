@@ -54,7 +54,7 @@ public class Service {
 
     public Parent saveParent() {
         Session session = getSession();
-        Parent parent = new Parent("Gordon", MALE, 71);
+        Parent parent = new Parent("Susie", FEMALE, 100);
         session.persist(parent);
         return parent;
     }
