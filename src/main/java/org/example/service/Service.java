@@ -38,8 +38,8 @@ public class Service {
     public void saveCustomEntity() {
         Session session = getSession();
         CustomType customType = new CustomType(5, "Yeap");
-        CustomEntity customEntity = new CustomEntity("Johnny", customType);
-        session.persist(customEntity);
+       // CustomEntity customEntity = new CustomEntity("Johnny", customType);
+        //session.persist(customEntity);
     }
 
     public CustomEntity getCustomEntity(int id) {
@@ -63,6 +63,10 @@ public class Service {
         // but here, newSessionEntity will have updated values because newSession will create a new SELECT query
         session.evict(customEntity1); // removes customEntity from the cache
         session.clear(); // completely clear the session
+    }
+
+    public void secondLevelCacheExample() {
+
     }
 
 }

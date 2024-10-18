@@ -1,11 +1,15 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_ONLY;
 
 @Entity
+@Cacheable
 @Table(name = "custom_table")
+@Cache(usage = READ_ONLY, region = "custom_cache")
 public class CustomEntity {
 
     @Id
@@ -15,16 +19,16 @@ public class CustomEntity {
     @Column(length = 30)
     private String name;
 
-    @Embedded
-    @Column(name = "my_type")
-    private CustomType customType;
+//    @Embedded
+//    @Column(name = "my_type")
+//    private CustomType customType;
 
     public CustomEntity() {
     }
 
-    public CustomEntity(String name, CustomType customType) {
+    public CustomEntity(String name) {
         this.name = name;
-        this.customType = customType;
+        // this.customType = customType;
     }
 
     public int getId() {
@@ -43,20 +47,20 @@ public class CustomEntity {
         this.name = name;
     }
 
-    public CustomType getCustomType() {
-        return customType;
-    }
-
-    public void setCustomType(CustomType customType) {
-        this.customType = customType;
-    }
+//    public CustomType getCustomType() {
+//        return customType;
+//    }
+//
+//    public void setCustomType(CustomType customType) {
+//        this.customType = customType;
+//    }
 
     @Override
     public String toString() {
         return "CustomEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", customType=" + customType +
+                //          ", customType=" + customType +
                 '}';
     }
 }
