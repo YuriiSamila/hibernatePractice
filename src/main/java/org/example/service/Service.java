@@ -9,6 +9,7 @@ import org.hibernate.boot.spi.MetadataImplementor;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.graph.RootGraph;
+import org.hibernate.internal.EmptyInterceptor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,6 +34,10 @@ public class Service {
                 .addAnnotatedClass(Building.class)
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(Worker.class)
+                .addAnnotatedClass(Company.class)
+                .addAnnotatedClass(Department.class)
+                .addAnnotatedClass(CompanyAssociation.class)
                 .buildSessionFactory();
 //        session = sessionFactory.getCurrentSession();
 //        transaction = session.beginTransaction();
@@ -129,13 +134,13 @@ public class Service {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.getTransaction().begin();
         List<Course> courses = new ArrayList<>();
-        for (int i = 1; i <=10; i++) {
+        for (int i = 1; i <= 10; i++) {
             Course course = new Course();
             course.setName("Course_" + i);
             currentSession.persist(course);
             courses.add(course);
         }
-        for (int i = 1; i <=10; i++) {
+        for (int i = 1; i <= 10; i++) {
             Student student = new Student();
             student.setName("Student_" + i);
             student.setCourses(courses);
@@ -145,6 +150,35 @@ public class Service {
                 currentSession.clear();
             }
         }
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+    }
+
+    public void saveWithEntityAssociation() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        Company company = new Company("SomeCompany");
+        currentSession.persist(company);
+        Department department = new Department("SomeDepartment");
+        currentSession.persist(department);
+        Worker worker = new Worker("SomeWorker");
+        currentSession.persist(worker);
+        CompanyAssociation companyAssociation = new CompanyAssociation(worker, company, department);
+        currentSession.persist(companyAssociation);
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+    }
+
+    public void saveWithMapAssociation() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        Company company = new Company("SomeCompany");
+        currentSession.persist(company);
+        Department department = new Department("SomeDepartment");
+        currentSession.persist(department);
+        Worker worker = new Worker("SomeWorker");
+        worker.getCompanyDepartmentMap().put(company, department);
+        currentSession.persist(worker);
         currentSession.getTransaction().commit();
         sessionFactory.close();
     }
