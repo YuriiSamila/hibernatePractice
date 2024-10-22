@@ -7,7 +7,7 @@ import org.example.utils.Gender;
 import java.util.Objects;
 
 @Entity
-public class Parent extends Person {
+public class Parent extends PersonOld {
 
     //    @Id
 ////    @GeneratedValue(generator = IdGenerator.NAME)

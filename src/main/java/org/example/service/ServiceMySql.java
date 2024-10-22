@@ -3,14 +3,13 @@ package org.example.service;
 import jakarta.persistence.Tuple;
 import org.example.entities.Child;
 import org.example.entities.Parent;
-import org.example.entities.Person;
+import org.example.entities.PersonOld;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
-import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class ServiceMySql {
         sessionFactory = new Configuration()
                 .addAnnotatedClass(Parent.class)
                 .addAnnotatedClass(Child.class)
-                .addAnnotatedClass(Person.class)
+                .addAnnotatedClass(PersonOld.class)
                 .buildSessionFactory();
         session = sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
@@ -70,9 +69,9 @@ public class ServiceMySql {
         return session.get(Parent.class, id);
     }
 
-    public Person getPerson(int id) {
+    public PersonOld getPerson(int id) {
         Session session = getSession();
-        Query<Person> query = session.createQuery("FROM Person WHERE id = :id", Person.class);
+        Query<PersonOld> query = session.createQuery("FROM Person WHERE id = :id", PersonOld.class);
         return query.setParameter("id", id)
                 .getSingleResult();
     }

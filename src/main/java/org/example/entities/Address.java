@@ -2,8 +2,15 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
-@Table()
+@Table
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "PERSON_GRAPH", attributeNodes = @NamedAttributeNode(value = "person")),
+        @NamedEntityGraph(name = "PERSON_AND_BUILDING_GRAPH", attributeNodes = {@NamedAttributeNode(value = "person"),
+        @NamedAttributeNode(value = "buildings")})
+})
 public class Address {
 
     @Id
@@ -18,7 +25,10 @@ public class Address {
 
     @JoinColumn(name = "person_id")
     @OneToOne(fetch = FetchType.LAZY)
-    private User person;
+    private Person person;
+
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Building> buildings;
 
     public Long getId() {
         return id;
@@ -44,11 +54,12 @@ public class Address {
         this.number = number;
     }
 
-    public User getPerson() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setPerson(User person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
+
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 import static jakarta.persistence.CascadeType.REMOVE;
 
 @Entity
-public class Child extends Person {
+public class Child extends PersonOld {
 
     //    @Id
 //    @GeneratedValue(strategy = IDENTITY)

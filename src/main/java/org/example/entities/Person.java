@@ -1,41 +1,29 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import org.example.utils.Gender;
-
-import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.TABLE;
-import static jakarta.persistence.InheritanceType.TABLE_PER_CLASS;
 
 @Entity
-@Inheritance(strategy = TABLE_PER_CLASS)
+@Table(name = "person")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = TABLE)
-    protected int id;
-    @Column
-    protected String name;
-    @Enumerated(STRING)
-    protected Gender gender;
-    @Column
-    protected Integer age;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Person() {
-    }
+    @Column(nullable = false, length = 30)
+    private String name;
 
-    public Person(int id, String name, Gender gender, Integer age) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-        this.age = age;
-    }
+    @Column(nullable = false)
+    private int age;
 
-    public int getId() {
+    @OneToOne(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Address address;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,37 +35,19 @@ public class Person {
         this.name = name;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    public Gender getGender() {
-        return gender;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void setChild(Child child) {
-
-    }
-
-    public void setParent(Parent parent) {
-
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", gender=" + gender +
-                ", age=" + age +
-                '}';
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

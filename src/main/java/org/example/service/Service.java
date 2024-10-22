@@ -1,31 +1,33 @@
 package org.example.service;
 
-import org.example.entities.Address;
-import org.example.entities.CustomEntity;
-import org.example.entities.CustomType;
-import org.example.entities.User;
+import org.example.entities.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.graph.RootGraph;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
 public class Service {
 
     private final SessionFactory sessionFactory;
-    private final Session session;
-    private final Transaction transaction;
+    private  Session session;
+    private  Transaction transaction;
 
     public Service() {
         sessionFactory = new Configuration()
                 .addAnnotatedClass(CustomEntity.class)
-                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Person.class)
                 .addAnnotatedClass(Address.class)
+                .addAnnotatedClass(Building.class)
                 .buildSessionFactory();
-        session = sessionFactory.getCurrentSession();
-        transaction = session.beginTransaction();
+//        session = sessionFactory.getCurrentSession();
+//        transaction = session.beginTransaction();
     }
 
     public Session getSession() {
@@ -73,7 +75,7 @@ public class Service {
     public void statelessSessionSelectUpdate() {
         StatelessSession statelessSession = sessionFactory.openStatelessSession();
         statelessSession.getTransaction().begin();
-        User user = new User();
+        Person user = new Person();
         user.setName("Andrew");
         user.setAge(77);
         statelessSession.insert(user);
@@ -87,5 +89,17 @@ public class Service {
         statelessSession.getTransaction().commit();
         sessionFactory.close();
     }
+
+public Address getWithPersonEntityGraph() {
+    Session currentSession = sessionFactory.getCurrentSession();
+    currentSession.getTransaction().begin();
+    RootGraph<?> personGraph = currentSession.getEntityGraph("PERSON_GRAPH");
+    HashMap<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph", personGraph);
+    Address address = currentSession.find(Address.class, 1L, properties);
+    currentSession.getTransaction().commit();
+    sessionFactory.close();
+    return address;
+}
 
 }
