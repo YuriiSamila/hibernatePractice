@@ -8,8 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Service service = new Service();
         try {
-            Address withPersonEntityGraph = service.getWithPersonEntityGraph();
-            System.out.println(withPersonEntityGraph);
+            service.batchInsert();
         } catch (Exception e) {
             if (service.getTransaction() != null) {
                 service.getTransaction().rollback();

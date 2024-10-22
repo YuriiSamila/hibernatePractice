@@ -5,10 +5,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.hibernate.boot.spi.MetadataImplementor;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.graph.RootGraph;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Thread.sleep;
@@ -16,8 +22,8 @@ import static java.lang.Thread.sleep;
 public class Service {
 
     private final SessionFactory sessionFactory;
-    private  Session session;
-    private  Transaction transaction;
+    private Session session;
+    private Transaction transaction;
 
     public Service() {
         sessionFactory = new Configuration()
@@ -25,6 +31,8 @@ public class Service {
                 .addAnnotatedClass(Person.class)
                 .addAnnotatedClass(Address.class)
                 .addAnnotatedClass(Building.class)
+                .addAnnotatedClass(Course.class)
+                .addAnnotatedClass(Student.class)
                 .buildSessionFactory();
 //        session = sessionFactory.getCurrentSession();
 //        transaction = session.beginTransaction();
@@ -90,16 +98,55 @@ public class Service {
         sessionFactory.close();
     }
 
-public Address getWithPersonEntityGraph() {
-    Session currentSession = sessionFactory.getCurrentSession();
-    currentSession.getTransaction().begin();
-    RootGraph<?> personGraph = currentSession.getEntityGraph("PERSON_GRAPH");
-    HashMap<String, Object> properties = new HashMap<>();
-    properties.put("javax.persistence.fetchgraph", personGraph);
-    Address address = currentSession.find(Address.class, 1L, properties);
-    currentSession.getTransaction().commit();
-    sessionFactory.close();
-    return address;
-}
+    public Address getWithPersonEntityGraph() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        RootGraph<?> personGraph = currentSession.getEntityGraph("PERSON_GRAPH");
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("javax.persistence.fetchgraph", personGraph);
+        Address address = currentSession.find(Address.class, 1L, properties);
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+        return address;
+    }
+
+    public void checkSupportBatches() {
+        Connection connection = null;
+        try {
+            connection = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
+                    .getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            System.out.println(connection.getMetaData().supportsBatchUpdates());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void batchInsert() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        List<Course> courses = new ArrayList<>();
+        for (int i = 1; i <=10; i++) {
+            Course course = new Course();
+            course.setName("Course_" + i);
+            currentSession.persist(course);
+            courses.add(course);
+        }
+        for (int i = 1; i <=10; i++) {
+            Student student = new Student();
+            student.setName("Student_" + i);
+            student.setCourses(courses);
+            currentSession.persist(student);
+            if (i % 5 == 0) {
+                currentSession.flush();
+                currentSession.clear();
+            }
+        }
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+    }
 
 }
