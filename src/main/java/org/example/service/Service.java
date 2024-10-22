@@ -1,9 +1,12 @@
 package org.example.service;
 
+import org.example.entities.Address;
 import org.example.entities.CustomEntity;
 import org.example.entities.CustomType;
+import org.example.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
@@ -18,6 +21,8 @@ public class Service {
     public Service() {
         sessionFactory = new Configuration()
                 .addAnnotatedClass(CustomEntity.class)
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Address.class)
                 .buildSessionFactory();
         session = sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
@@ -63,6 +68,24 @@ public class Service {
         // but here, newSessionEntity will have updated values because newSession will create a new SELECT query
         session.evict(customEntity1); // removes customEntity from the cache
         session.clear(); // completely clear the session
+    }
+
+    public void statelessSessionSelectUpdate() {
+        StatelessSession statelessSession = sessionFactory.openStatelessSession();
+        statelessSession.getTransaction().begin();
+        User user = new User();
+        user.setName("Andrew");
+        user.setAge(77);
+        statelessSession.insert(user);
+        Address address = new Address();
+        address.setNumber(485);
+        address.setStreet("SomeStreet");
+        address.setPerson(user);
+        statelessSession.insert(address);
+        user.setName("ChangedName");
+        statelessSession.update(user); // doesn't work without update() unlike with the common session
+        statelessSession.getTransaction().commit();
+        sessionFactory.close();
     }
 
 }

@@ -7,9 +7,7 @@ public class Main {
     public static void main(String[] args) {
         Service service = new Service();
         try {
-            service.saveCustomEntity();
-            System.out.println(service.getCustomEntity(2));
-            service.commitTransaction();
+            service.statelessSessionSelectUpdate();
         } catch (Exception e) {
             if (service.getTransaction() != null) {
                 service.getTransaction().rollback();

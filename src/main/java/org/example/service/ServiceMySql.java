@@ -11,9 +11,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
-import org.hibernate.query.criteria.JpaCriteriaQuery;
-import org.hibernate.query.criteria.JpaPredicate;
-import org.hibernate.query.criteria.JpaRoot;
+
 
 import java.util.List;
 
@@ -101,37 +99,37 @@ public class ServiceMySql {
         session.flush();
     }
 
-    public List<Parent> getParentsCriteriaAPI() {
-        Session session = getSession();
-        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
-        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
-        JpaCriteriaQuery<Parent> selected = criteriaQuery.select(root);
-        Query<Parent> query = session.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
-
-    public List<Parent> getParentsCriteriaAPIById(int id) {
-        Session session = getSession();
-        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
-        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), id));
-        Query<Parent> query = session.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
-
-    public List<Parent> getParentsCriteriaAPITwoPredicates(int id, String column) {
-        Session session = getSession();
-        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
-        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
-        JpaPredicate idPredicate = criteriaBuilder.equal(root.get("id"), id);
-        JpaPredicate namePredicate = criteriaBuilder.isNotNull(root.get(column));
-        criteriaQuery.select(root).where(criteriaBuilder.or(idPredicate, namePredicate)).orderBy(criteriaBuilder.asc(root.get("age")));
-        Query<Parent> query = session.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
+//    public List<Parent> getParentsCriteriaAPI() {
+//        Session session = getSession();
+//        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
+//        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
+//        JpaCriteriaQuery<Parent> selected = criteriaQuery.select(root);
+//        Query<Parent> query = session.createQuery(criteriaQuery);
+//        return query.getResultList();
+//    }
+//
+//    public List<Parent> getParentsCriteriaAPIById(int id) {
+//        Session session = getSession();
+//        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
+//        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
+//        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), id));
+//        Query<Parent> query = session.createQuery(criteriaQuery);
+//        return query.getResultList();
+//    }
+//
+//    public List<Parent> getParentsCriteriaAPITwoPredicates(int id, String column) {
+//        Session session = getSession();
+//        HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        JpaCriteriaQuery<Parent> criteriaQuery = criteriaBuilder.createQuery(Parent.class);
+//        JpaRoot<Parent> root = criteriaQuery.from(Parent.class);
+//        JpaPredicate idPredicate = criteriaBuilder.equal(root.get("id"), id);
+//        JpaPredicate namePredicate = criteriaBuilder.isNotNull(root.get(column));
+//        criteriaQuery.select(root).where(criteriaBuilder.or(idPredicate, namePredicate)).orderBy(criteriaBuilder.asc(root.get("age")));
+//        Query<Parent> query = session.createQuery(criteriaQuery);
+//        return query.getResultList();
+//    }
 
     public void getParentsNativeQueryTuple() {
         Session session = getSession();
