@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.apache.logging.log4j.core.util.IOUtils;
 import org.example.entities.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,10 +8,16 @@ import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.boot.spi.MetadataImplementor;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.BlobProxy;
+import org.hibernate.engine.jdbc.ClobProxy;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.graph.RootGraph;
 import org.hibernate.internal.EmptyInterceptor;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +45,7 @@ public class Service {
                 .addAnnotatedClass(Company.class)
                 .addAnnotatedClass(Department.class)
                 .addAnnotatedClass(CompanyAssociation.class)
+                .addAnnotatedClass(ClobBlob.class)
                 .buildSessionFactory();
 //        session = sessionFactory.getCurrentSession();
 //        transaction = session.beginTransaction();
@@ -179,6 +187,32 @@ public class Service {
         Worker worker = new Worker("SomeWorker");
         worker.getCompanyDepartmentMap().put(company, department);
         currentSession.persist(worker);
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+    }
+
+    public void saveClobBlob() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        ClobBlob clobBlob = new ClobBlob();
+        clobBlob.setClob(ClobProxy.generateProxy("Hello"));
+        clobBlob.setBlob(BlobProxy.generateProxy("World".getBytes(StandardCharsets.UTF_8)));
+        currentSession.persist(clobBlob);
+        currentSession.getTransaction().commit();
+        sessionFactory.close();
+    }
+
+    public void getClobBlob() throws SQLException, IOException {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.getTransaction().begin();
+        ClobBlob result = currentSession.createNativeQuery("SELECT * FROM lob WHERE lob.id = 1", ClobBlob.class)
+                .getSingleResult();
+        Reader reader = result.getClob().getCharacterStream();
+        StringWriter stringWriter = new StringWriter();
+        IOUtils.copy(reader, stringWriter);
+        String clobString = stringWriter.toString();
+        String blobString = new String(result.getBlob().getBytes(1, (int) result.getBlob().length()));
+        System.out.println(clobString + "---" + blobString);
         currentSession.getTransaction().commit();
         sessionFactory.close();
     }
